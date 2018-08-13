@@ -19,6 +19,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 #include "TROOT.h"
 #include "TFile.h"
@@ -52,16 +53,11 @@ int main(int argc, char **argv){
 
   //----Output file----//
   string parent = "Stopping_Mu_Sample/";
-  /*
-  const int dir_err = mkdir(parent.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  if (-1 == dir_err)
-  {
-      printf("Error creating directory!n");
-      exit(1);
+  DIR* dir = opendir(parent.c_str());
+  if (ENOENT == errno){ /* Directory does not exists. */
+    const int dir_err = mkdir(parent.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
-  */
-  //TString pre_outfile = (TString) parent + "mu_sel_" ;
-  TString pre_outfile = "mu_sel_" ;
+  TString pre_outfile = (TString) parent + "mu_sel_" ;
   //----Filelist to use----//
   std::ifstream filelist(argv[1]);
   std::string rootfile;
@@ -105,13 +101,12 @@ int main(int argc, char **argv){
       if(cl.back().x > x_anode - x_anode_th/2. && cl.back().x < x_anode + x_anode_th/2.) continue;
       if(cl.back().y < -85. || cl.at(0).y < 95.) continue;
       if(cl.back().z <  20. || cl.at(0).z > 1015.) continue;
-	    if(abs(cl.back().x - cl.at(0).x) > 230.) continue;
+      if(abs(cl.back().x - cl.at(0).x) > 230.) continue;
       if(mymaths::pythagoras(cl.back().x,cl.at(0).x,cl.back().y,cl.at(0).y,cl.back().z,cl.at(0).z) < 20.) continue;
-	    if(cl.back().x < -165. or cl.back().x > 340.) continue;
+      if(cl.back().x < -165. or cl.back().x > 340.) continue;
       std::cout << "This cluster passed: "<< cl.at(0).cn << '\n';
 
       double xcn = (abs((int)cl.at(0).x)*cl.size());
-
       for(ClstPoint &p : cl){
         tclst_rn = p.rn; tclst_ev = p.ev; tclst_cn = p.cn; tclst_sz = cl.size();
         tclst_xcn = xcn;
@@ -124,8 +119,10 @@ int main(int argc, char **argv){
       tsel_clsts_xcn = xcn;
       tsel_clsts->Fill();
     }
+    
     f_output->Write();
     f_output->Close();
+    cout << Form("Done with event %d", event.ev()) << endl;
   }
   std::cout << "DONE" << '\n';
 }

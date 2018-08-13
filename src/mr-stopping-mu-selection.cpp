@@ -46,7 +46,8 @@ void EventHandler::load_event(std::string line){
   T_charge_cluster->SetBranchAddress("uqc", &uq);
   T_charge_cluster->SetBranchAddress("vqc", &vq);
   T_charge_cluster->SetBranchAddress("wqc", &wq);
-  fcids.push_back(T_charge_cluster->GetEntry(0));
+  T_charge_cluster->GetEntry(0); 
+  fcids.push_back(cluster_id);
   for (int i = 0; i < T_charge_cluster->GetEntries(); i++){
     T_charge_cluster->GetEntry(i);
     point.rn = frun_num; point.ev = fev_num; point.cn = cluster_id;
