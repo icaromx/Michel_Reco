@@ -17,6 +17,9 @@
 #include <string>
 #include <math.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include "TROOT.h"
 #include "TFile.h"
 #include "TNetFile.h"
@@ -46,9 +49,16 @@ int main(int argc, char **argv){
   double x_anode_th = 3.0;
   double x_cathode_th = 4.0;
 
+
   //----Output file----//
-  string parent = "/Users/ivan/Work/Michel_Reco/Data/";
-  TString pre_outfile = "mu_sel_" ;
+  string parent = "Stopping_Mu_Sample/";
+  const int dir_err = mkdir(parent.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  if (-1 == dir_err)
+  {
+      printf("Error creating directory!n");
+      exit(1);
+  }
+  TString pre_outfile = (TString) parent + "mu_sel_" ;
 
   //----Filelist to use----//
   std::ifstream filelist(argv[1]);
