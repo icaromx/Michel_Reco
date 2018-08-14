@@ -68,6 +68,7 @@ int main(int argc, char **argv){
     std::vector<int> clusters = event.wc_clusters();
     WCClst all_clsts = event.Get_All_Tracks();
 
+    std::cout << Form("Looking at Run %d, Event %d", event.rn(), event.ev()) << '\n';
     //----Specifying root file to make---//
     TFile *f_output;
     TString f_name = Form(pre_outfile + "Run_%d_Event_%d.root", event.rn(), event.ev());
@@ -122,7 +123,7 @@ int main(int argc, char **argv){
 
     f_output->Write();
     f_output->Close();
-    cout << Form("Done with event %d", event.ev()) << endl;
+    cout << Form("Done with Run %d, Event %d", event.rn(), event.ev()) << endl;
   }
-  std::cout << "DONE" << '\n';
+  std::cout << "DONE WITH PROGRAM" << '\n';
 }
