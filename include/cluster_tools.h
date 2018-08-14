@@ -26,7 +26,7 @@ struct by_y {
 
 class EventHandler {
     TString ffilename;
-    Int_t frun_num, fev_num;
+    Int_t frun_num, fev_num, fentries;
     std::vector<int> fcids;
     WCClst fall_clsts;
   public:
@@ -36,6 +36,7 @@ class EventHandler {
     int ev() {return fev_num;}
     std::vector<int> wc_clusters() {return fcids;}
     WCClst Get_All_Tracks() {return fall_clsts;}
+    int GetEntries(){return fentries;}
 };
 
 class WCClstManager {

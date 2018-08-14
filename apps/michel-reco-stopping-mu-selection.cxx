@@ -65,6 +65,7 @@ int main(int argc, char **argv){
   while(std::getline(filelist, rootfile)){ //Looping over events
     EventHandler event;
     event.load_event(rootfile);
+    if(event.GetEntries() == 0) continue;
     std::vector<int> clusters = event.wc_clusters();
     WCClst all_clsts = event.Get_All_Tracks();
 
