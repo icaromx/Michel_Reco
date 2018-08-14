@@ -1,6 +1,8 @@
 #include <cmath>
 #include <vector>
+#include <stdlib.h>
 #include "mymaths.h"
+
 
 using namespace std;
 
