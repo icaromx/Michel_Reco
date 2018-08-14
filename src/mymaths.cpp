@@ -1,6 +1,7 @@
 #include <cmath>
 #include <vector>
 #include <stdlib.h>
+#include <algorithm>
 #include "mymaths.h"
 
 
