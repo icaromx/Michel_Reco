@@ -12,10 +12,12 @@ include_directories(src)
 include_directories(apps)
 
 add_library(mymaths src/mymaths.cpp)
-add_library(mr-stopping-mu-selection src/mr-stopping-mu-selection.cpp)
+add_library(cluster_tools src/cluster_tools.cpp)
+add_library(pca src/pca.cpp)
 
 install(TARGETS mymaths DESTINATION lib/)
-install(TARGETS mr-stopping-mu-selection DESTINATION lib/)
+install(TARGETS cluster_tools DESTINATION lib/)
+install(TARGETS pca DESTINATION lib/)
 
 ##############ROOT#############################
 # You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
@@ -35,8 +37,14 @@ add_definitions(${ROOT_CXX_FLAGS})
 
 #---Create executables
 add_executable(michel-reco-stopping-mu-selection apps/michel-reco-stopping-mu-selection.cxx)
+add_executable(michel-reco-clustering apps/michel-reco-clustering.cxx)
 
 #---Link executable to libraries
 target_link_libraries(michel-reco-stopping-mu-selection mymaths)
 target_link_libraries(michel-reco-stopping-mu-selection ${ROOT_LIBRARIES})
-target_link_libraries(michel-reco-stopping-mu-selection mr-stopping-mu-selection)
+target_link_libraries(michel-reco-stopping-mu-selection cluster_tools)
+
+target_link_libraries(michel-reco-clustering mymaths)
+target_link_libraries(michel-reco-clustering ${ROOT_LIBRARIES})
+target_link_libraries(michel-reco-clustering cluster_tools)
+target_link_libraries(michel-reco-clustering pca)

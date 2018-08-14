@@ -35,7 +35,7 @@
 #include "TStyle.h"
 
 #include "mymaths.h"
-#include "mr-stopping-mu-selection.h"
+#include "cluster_tools.h"
 
 using namespace std;
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv){
     EventHandler event;
     event.load_event(rootfile);
     std::vector<int> clusters = event.wc_clusters();
-    Clst all_clsts = event.Get_All_Tracks();
+    WCClst all_clsts = event.Get_All_Tracks();
 
     //----Specifying root file to make---//
     TFile *f_output;
@@ -91,12 +91,12 @@ int main(int argc, char **argv){
     tsel_clsts->Branch("cluster_id",&tsel_clsts_cn); tsel_clsts->Branch("size",&tsel_clsts_sz);
     tsel_clsts->Branch("xcn",&tsel_clsts_xcn);
 
-    ClstManager clsts;
+    WCClstManager clsts;
     clsts.load_tracks(all_clsts, clusters);
-    ClstBundle EventClsts;
+    WCClstBundle EventClsts;
     EventClsts = clsts.Get_Clusters();
 
-    for(Clst &cl : EventClsts){
+    for(WCClst &cl : EventClsts){
       if(cl.back().x > x_cathode - x_cathode_th/2. && cl.back().x < x_cathode + x_cathode_th/2.) continue;
       if(cl.back().x > x_anode - x_anode_th/2. && cl.back().x < x_anode + x_anode_th/2.) continue;
       if(cl.back().y < -85. || cl.at(0).y < 95.) continue;
@@ -107,7 +107,7 @@ int main(int argc, char **argv){
       std::cout << "This cluster passed: "<< cl.at(0).cn << '\n';
 
       double xcn = (abs((int)cl.at(0).x)*cl.size());
-      for(ClstPoint &p : cl){
+      for(WCClstPoint &p : cl){
         tclst_rn = p.rn; tclst_ev = p.ev; tclst_cn = p.cn; tclst_sz = cl.size();
         tclst_xcn = xcn;
         tclst_x = p.x; tclst_y = p.y; tclst_z = p.z; tclst_q = p.q;
@@ -119,7 +119,7 @@ int main(int argc, char **argv){
       tsel_clsts_xcn = xcn;
       tsel_clsts->Fill();
     }
-    
+
     f_output->Write();
     f_output->Close();
     cout << Form("Done with event %d", event.ev()) << endl;

@@ -24,7 +24,7 @@
 #include "TStyle.h"
 
 #include "mymaths.h"
-#include "mr-stopping-mu-selection.h"
+#include "cluster_tools.h"
 
 void EventHandler::load_event(std::string line){
   ffilename.Form("%s",line.c_str());
@@ -36,7 +36,7 @@ void EventHandler::load_event(std::string line){
 
   Int_t cluster_id;
   Double_t x, y, z, q, uq, vq, wq;
-  ClstPoint point;
+  WCClstPoint point;
   TTree *T_charge_cluster = (TTree*)infile->Get("T_charge_cluster");
   T_charge_cluster->SetBranchAddress("cluster_id", &cluster_id);
   T_charge_cluster->SetBranchAddress("qx", &x);
@@ -46,7 +46,7 @@ void EventHandler::load_event(std::string line){
   T_charge_cluster->SetBranchAddress("uqc", &uq);
   T_charge_cluster->SetBranchAddress("vqc", &vq);
   T_charge_cluster->SetBranchAddress("wqc", &wq);
-  T_charge_cluster->GetEntry(0); 
+  T_charge_cluster->GetEntry(0);
   fcids.push_back(cluster_id);
   for (int i = 0; i < T_charge_cluster->GetEntries(); i++){
     T_charge_cluster->GetEntry(i);
@@ -63,10 +63,10 @@ void EventHandler::load_event(std::string line){
 
 }
 
-void ClstManager::load_tracks(Clst event_clsts, std::vector<int> cluster_ids){
+void WCClstManager::load_tracks(WCClst event_clsts, std::vector<int> cluster_ids){
   for( int &cn : cluster_ids){
-    Clst cluster;
-    for (ClstPoint &point : event_clsts){
+    WCClst cluster;
+    for (WCClstPoint &point : event_clsts){
       if(point.cn != cn and !cluster.empty()) break;
       if(point.cn != cn) continue;
       cluster.push_back(point);
