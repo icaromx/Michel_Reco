@@ -37,7 +37,7 @@ void EventHandler::load_event(std::string line){
   Int_t cluster_id;
   Double_t x, y, z, q, uq, vq, wq;
   WCClstPoint point;
-  TTree *T_charge_cluster = (TTree*)infile->Get("T_charge_cluster");
+  TTree *T_charge_cluster = (TTree*)infile->Get("T_charge_cluster_q1");
   T_charge_cluster->SetBranchAddress("cluster_id", &cluster_id);
   T_charge_cluster->SetBranchAddress("qx", &x);
   T_charge_cluster->SetBranchAddress("qy", &y);
