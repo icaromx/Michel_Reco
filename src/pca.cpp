@@ -26,8 +26,27 @@
 #include "mymaths.h"
 #include "pca.h"
 
+#ifdef __APPLE__
+    #if TARGET_IPHONE_SIMULATOR
+         // iOS Simulator
+    #elif TARGET_OS_IPHONE
+        // iOS device
+    #elif TARGET_OS_MAC
+        #include "/usr/local/Cellar/eigen/3.3.4/include/eigen3/Eigen/Dense" //Needed on MACOS
+    #else
+    #   error "Unknown Apple platform"
+    #endif
+#elif __linux__
+    #include "/grid/fermiapp/products/larsoft/eigen/v3_3_3/include/eigen3/Eigen/Dense" //Needed on uboonegpvm
+#elif __unix__ // all unices not caught above
+    // Unix
+#elif defined(_POSIX_VERSION)
+    // POSIX
+#else
+#   error "Unknown compiler"
+#endif
 
-#include "/usr/local/Cellar/eigen/3.3.4/include/eigen3/Eigen/Dense" //Needed on MACOS
+//#include "/usr/local/Cellar/eigen/3.3.4/include/eigen3/Eigen/Dense" //Needed on MACOS
 
 using namespace std;
 
