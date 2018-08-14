@@ -19,7 +19,7 @@ namespace mymaths{
 
   double trunc_mean(std::vector<double> data, double per){
   	double m = 0, trunc;
-  	sort(data.begin(), data.end());
+  	std::sort(data.begin(), data.end());
   	trunc = data.size()*per;
   	trunc = (int)trunc;
   	for (int i = trunc; i < data.size() - trunc; ++i){
