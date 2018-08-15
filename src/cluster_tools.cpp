@@ -61,7 +61,7 @@ void EventHandler::load_event(std::string line){
   std::sort(fcids.begin(),fcids.end());
   std::reverse(fcids.begin(),fcids.end());
   std::sort(fall_clsts.begin(), fall_clsts.end(), by_cn());
-
+  infile->Close();
 }
 
 void WCClstManager::load_tracks(WCClst event_clsts, std::vector<int> cluster_ids){
