@@ -76,7 +76,7 @@ int main(int argc, char **argv){
     f_output = TFile::Open(f_name,"RECREATE");
 
     //----TTree to store results----//
-    TTree *tclst = new TTree("T_charge_cluster","No flash cuts");
+    TTree *tclst = new TTree("T_charge_cluster_q1","No flash cuts");
     double tclst_rn, tclst_ev, tclst_cn, tclst_sz, tclst_xcn;
     double tclst_x, tclst_y, tclst_z, tclst_q;
     double tclst_uq, tclst_vq, tclst_wq;

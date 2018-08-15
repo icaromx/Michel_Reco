@@ -1,5 +1,5 @@
 // Author: Ivan Caro Terrazas
-// Date: 13/August/2018
+// Date: 11/August/2018
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -48,27 +48,42 @@ using namespace std;
 int main(int argc, char **argv){
 
   //----Parameters----//
+  double charge_cut = 1.;
+  //Clustering Algorithm Parameters
+  double alpha = 5; // Sphere radius
+  double ext_alpha = 21.5; // Extended cone radius
+  double al_print = alpha*100; //
+  unsigned ang_points = 8; // Points in window usied for ordering algorithm
+  int min_points_trk = ang_points*2; // Minimum number of points usied in ordering algorithm
+  double min_cone_ang = 0.97; // Minimum Cone angle; ArcCos(0.97) -> 14 deg -> 0.24 Rad
+  double max_phi = acos(min_cone_ang); // cone angle in radians
+  double back_ang = -0.4; // Angle of back cone 113 deg -> 1.98 Rad
+  back_ang = acos(back_ang); // back angle in radians
+
+  double dist_unclustered = 2.; //Distance at which the unclustered point is considered for the unclustered/clustered ratio
+  double cut_ucp_ratio = 0.20; // unclustered/clustered ratio at which to cut cluster as having to many unclustered points
+  double cut_bottom_dist = 10.;// CUT: Max distance from the last clustered point and the lowest Y value point
+
+  double eps_ang = 0.314159; // epsilon_phi paramter
+  double eps_dist = 1.5; // epsilon_r parameter
+  double weight;
 
   //----Output file----//
-  string parent = "Stopping_Mu_Sample/";
+  string parent = "Clustered_Sample/";
   DIR* dir = opendir(parent.c_str());
   if (ENOENT == errno){ /* Directory does not exists. */
     const int dir_err = mkdir(parent.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
-  TString pre_outfile = (TString) parent + "mu_sel_" ;
+  TString pre_outfile = (TString) parent + "clst_" ;
 
   //----Specifying root file to make---//
   TFile *f_output;
-  TString f_name = "test.root";
-  //TString f_name = Form(pre_outfile + "Run_%d_Event_%d.root", event.rn(), event.ev());
+  //TString f_name = "test.root";
+  TString f_name = Form(pre_outfile + "test_%d.root", 314);
   f_output = TFile::Open(f_name,"RECREATE");
 
-  //----Filelist to use----//
-  std::ifstream filelist(argv[1]);
-  std::string rootfile;
-
   //----TTree to store results----//
-  TTree *tclst = new TTree("T_charge_cluster","No flash cuts");
+  TTree *tclst = new TTree("Clusters","No flash cuts");
   double tclst_rn, tclst_ev, tclst_cn, tclst_sz, tclst_xcn;
   double tclst_x, tclst_y, tclst_z, tclst_q;
   double tclst_uq, tclst_vq, tclst_wq;
@@ -79,25 +94,23 @@ int main(int argc, char **argv){
   tclst->Branch("q",&tclst_q); tclst->Branch("uq",&tclst_uq);
   tclst->Branch("vq",&tclst_vq); tclst->Branch("wq",&tclst_wq);
 
-  TTree *tsel_clsts = new TTree("T_Clusters","Selected clusters for sample");
-  double tsel_clsts_rn, tsel_clsts_ev, tsel_clsts_cn, tsel_clsts_sz, tsel_clsts_xcn;
-  tsel_clsts->Branch("run_num",&tsel_clsts_rn); tsel_clsts->Branch("ev_num",&tsel_clsts_ev);
-  tsel_clsts->Branch("cluster_id",&tsel_clsts_cn); tsel_clsts->Branch("size",&tsel_clsts_sz);
-  tsel_clsts->Branch("xcn",&tsel_clsts_xcn);
+  //----Filelist to use----//
+  std::ifstream filelist(argv[1]);
+  std::string rootfile;
 
   while(std::getline(filelist, rootfile)){ //Looping over events
     EventHandler event;
-    event.load_event(rootfile);
-    std::vector<int> clusters = event.wc_clusters();
+    event.load_event(rootfile); //Loads Even
+    std::vector<int> clusters = event.wc_clusters(); //Get cluster list
     WCClst all_clsts = event.Get_All_Tracks();
 
     WCClstManager clsts;
     clsts.load_tracks(all_clsts, clusters);
     WCClstBundle EventClsts;
-    EventClsts = clsts.Get_Clusters();
+    EventClsts = clsts.Get_Clusters(); //Clusters Separated
 
     for(WCClst &cl : EventClsts){
-
+      std::cout << cl.at(0).x << '\n';
     }
 
     f_output->Write();
