@@ -9,7 +9,5 @@ cd ../build_Michel_Reco/
 cmake ../Michel_Reco/
 make
 
-chmod +x setup.sh
-
 export MICHELRECOPATH=`pwd`
 export PATH=${MICHELRECOPATH}/bin:$PATH
