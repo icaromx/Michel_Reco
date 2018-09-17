@@ -39,14 +39,14 @@ add_definitions(${ROOT_CXX_FLAGS})
 
 #---Create executables
 add_executable(michel-reco-stopping-mu-selection apps/michel-reco-stopping-mu-selection.cxx)
-add_executable(michel-reco-clustering apps/michel-reco-clustering.cxx)
+add_executable(michel-reco-track-profile apps/michel-reco-track-profile.cxx)
 
 #---Link executable to libraries
 target_link_libraries(michel-reco-stopping-mu-selection mymaths)
 target_link_libraries(michel-reco-stopping-mu-selection ${ROOT_LIBRARIES})
 target_link_libraries(michel-reco-stopping-mu-selection cluster_tools)
 
-target_link_libraries(michel-reco-clustering mymaths)
-target_link_libraries(michel-reco-clustering ${ROOT_LIBRARIES})
-target_link_libraries(michel-reco-clustering cluster_tools)
-target_link_libraries(michel-reco-clustering pca)
+target_link_libraries(michel-reco-track-profile mymaths)
+target_link_libraries(michel-reco-track-profile ${ROOT_LIBRARIES})
+target_link_libraries(michel-reco-track-profile cluster_tools)
+target_link_libraries(michel-reco-track-profile pca)

@@ -37,6 +37,7 @@
 #include "mymaths.h"
 #include "cluster_tools.h"
 #include "pca.h"
+#include "parameters.h"
 
 #define PI 3.14159
 #define euler 2.71828
@@ -81,7 +82,7 @@ int main(int argc, char **argv){
   //TString f_name = "test.root";
   TString f_name = Form(pre_outfile + "test_%d.root", 314);
   f_output = TFile::Open(f_name,"RECREATE");
-
+/*
   //----TTree to store results----//
   TTree *tclst = new TTree("Clusters","No flash cuts");
   double tclst_rn, tclst_ev, tclst_cn, tclst_sz, tclst_xcn;
@@ -93,30 +94,34 @@ int main(int argc, char **argv){
   tclst->Branch("x",&tclst_x); tclst->Branch("y",&tclst_y); tclst->Branch("z",&tclst_z);
   tclst->Branch("q",&tclst_q); tclst->Branch("uq",&tclst_uq);
   tclst->Branch("vq",&tclst_vq); tclst->Branch("wq",&tclst_wq);
+*/
 
   //----Filelist to use----//
   std::ifstream filelist(argv[1]);
   std::string rootfile;
 
-  while(std::getline(filelist, rootfile)){ //Looping over events
-    EventHandler event;
-    event.load_event(rootfile); //Loads Even
+  while(std::getline(filelist, rootfile)){ //<1> Looping over events
+    EventHandler event; event.load_event(rootfile); //Loads Even
     std::vector<int> clusters = event.wc_clusters(); //Get cluster list
     WCClst all_clsts = event.Get_All_Tracks();
 
-    WCClstManager clsts;
-    clsts.load_tracks(all_clsts, clusters);
-    WCClstBundle EventClsts;
-    EventClsts = clsts.Get_Clusters(); //Clusters Separated
+    Int_t run_num, ev_num;
+    run_num = event.rn(); ev_num = event.ev();
 
-    for(WCClst &cl : EventClsts){
-      std::cout << cl.at(0).x << '\n';
-    }
+    WCClstManager clsts; clsts.load_tracks(all_clsts, clusters);
+    WCClstBundle EventClsts = clsts.Get_Clusters(); //Clusters Separated
 
-    f_output->Write();
-    f_output->Close();
+    for(WCClst &cl : EventClsts){ //<2> Looping over WC clusters
+      StitchTool stitched_clst;
+      stitched_clst.load_wc_cluster(cl);
+      WCClstPoint clst_points, unclst, temp_unclst, low_q1_unclst;
+      
+    } //<2> WC clusters loops
     cout << Form("Done with event %d", event.ev()) << endl;
-  }
+  }//<1> Event Loops
+
+  f_output->Write();
+  f_output->Close();
   std::cout << "DONE" << '\n';
 
 }

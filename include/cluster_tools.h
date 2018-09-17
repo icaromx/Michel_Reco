@@ -3,7 +3,7 @@
 using namespace std;
 
 struct WCClstPoint{
-  Int_t rn, ev, cn;
+  Int_t rn, ev, cn, xcn;
   Double_t x, y, z, q, uq, vq, wq;
 };
 
@@ -26,7 +26,7 @@ struct by_y {
 
 class EventHandler {
     TString ffilename;
-    Int_t frun_num, fev_num, fentries;
+    Int_t frun_num, fsub_run, fev_num, fentries;
     std::vector<int> fcids;
     WCClst fall_clsts;
   public:
@@ -34,6 +34,7 @@ class EventHandler {
     TString name() {return ffilename;}
     int rn() {return frun_num;}
     int ev() {return fev_num;}
+    int sr() {return fsub_run;}
     std::vector<int> wc_clusters() {return fcids;}
     WCClst Get_All_Tracks() {return fall_clsts;}
     int GetEntries(){return fentries;}
@@ -45,4 +46,12 @@ class WCClstManager {
   public:
     void load_tracks(WCClst,std::vector<int>);
     WCClstBundle Get_Clusters() {return event_clusters;}
+};
+
+class StitchTool {
+    WCClst stitch_pts, unstitch_pts;//, temp_unstitch, low_q_pts;
+  public:
+    void load_wc_cluster(WCClst);
+    WCClst Get_Stitched_Pts() {return stitch_pts;}
+    WCClst Get_UnStitched_Pts() {return unstitch_pts;}
 };

@@ -77,19 +77,21 @@ int main(int argc, char **argv){
 
     //----TTree to store results----//
     TTree *trun = new TTree("Trun","Run Info");
-    double runNo = event.rn(); double eventNo = event.ev();
-    trun->Branch("runNo",&runNo); trun->Branch("eventNo",&eventNo);
+    Int_t runNo, subRunNo, eventNo;
+    runNo = event.rn(); subRunNo = event.sr(); eventNo = event.ev();
+    trun->Branch("runNo",&runNo); trun->Branch("subRunNo",&subRunNo); trun->Branch("eventNo",&eventNo);
+    trun-> Fill(); trun->Write();
 
     TTree *tclst = new TTree("T_charge_cluster_q1","No flash cuts");
-    double tclst_rn, tclst_ev, tclst_cn, tclst_sz, tclst_xcn;
+    Int_t tclst_rn, tclst_ev, tclst_cn, tclst_sz, tclst_xcn;
     double tclst_x, tclst_y, tclst_z, tclst_q;
     double tclst_uq, tclst_vq, tclst_wq;
     tclst->Branch("run_num",&tclst_rn); tclst->Branch("ev_num",&tclst_ev);
     tclst->Branch("cluster_id",&tclst_cn); tclst->Branch("size",&tclst_sz);
     tclst->Branch("xcn",&tclst_xcn);
-    tclst->Branch("x",&tclst_x); tclst->Branch("y",&tclst_y); tclst->Branch("z",&tclst_z);
-    tclst->Branch("q",&tclst_q); tclst->Branch("uq",&tclst_uq);
-    tclst->Branch("vq",&tclst_vq); tclst->Branch("wq",&tclst_wq);
+    tclst->Branch("qx",&tclst_x); tclst->Branch("qy",&tclst_y); tclst->Branch("qz",&tclst_z);
+    tclst->Branch("qc",&tclst_q); tclst->Branch("uqc",&tclst_uq);
+    tclst->Branch("vqc",&tclst_vq); tclst->Branch("wqc",&tclst_wq);
 
     TTree *tsel_clsts = new TTree("T_Clusters","Selected clusters for sample");
     double tsel_clsts_rn, tsel_clsts_ev, tsel_clsts_cn, tsel_clsts_sz, tsel_clsts_xcn;
@@ -97,6 +99,7 @@ int main(int argc, char **argv){
     tsel_clsts->Branch("cluster_id",&tsel_clsts_cn); tsel_clsts->Branch("size",&tsel_clsts_sz);
     tsel_clsts->Branch("xcn",&tsel_clsts_xcn);
 
+    //----WireCell (WC) cluster manager----//
     WCClstManager clsts;
     clsts.load_tracks(all_clsts, clusters);
     WCClstBundle EventClsts;
@@ -112,7 +115,7 @@ int main(int argc, char **argv){
       if(cl.back().x < -165. or cl.back().x > 340.) continue;
       std::cout << "This cluster passed: "<< cl.at(0).cn << '\n';
 
-      double xcn = (abs((int)cl.at(0).x)*cl.size());
+      int xcn = (abs((int)cl.at(0).x)*cl.size());
       for(WCClstPoint &p : cl){
         tclst_rn = p.rn; tclst_ev = p.ev; tclst_cn = p.cn; tclst_sz = cl.size();
         tclst_xcn = xcn;
