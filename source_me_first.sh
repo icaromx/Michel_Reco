@@ -4,10 +4,12 @@ if [[ "$HOSTNAME" == *"uboonegpvm"* ]]; then
 	setup root v6_12_06a -q e15:prof
 fi
 
-mkdir ../build_Michel_Reco/
-cd ../build_Michel_Reco/
+mkdir -p ../test_build_Michel_Reco/
+cd ../test_build_Michel_Reco/
 cmake ../Michel_Reco/
 make
+
+#export PATH=/usr/local/Cellar/eigen/3.3.4/include/eigen3/Eigen:$PATH
 
 export MICHELRECOPATH=`pwd`
 export PATH=${MICHELRECOPATH}/bin:$PATH

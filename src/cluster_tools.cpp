@@ -101,8 +101,8 @@ void StitchTool::load_wc_cluster(WCClst wcclst){
     WCClstPoint temp_pt;
     temp_pt.rn = wcclst.at(i).rn; temp_pt.ev = wcclst.at(i).ev;
     temp_pt.cn = wcclst.at(i).cn; temp_pt.xcn = wcclst.at(i).xcn;
-    temp_pt.x = wcclst.at(i).x; temp_pt.y = wcclst.at(i).y; temp_pt.z = wcclst.at(i).z;
-    temp_pt.q = wcclst.at(i).q;
+    temp_pt.x  = wcclst.at(i).x; temp_pt.y = wcclst.at(i).y; temp_pt.z = wcclst.at(i).z;
+    temp_pt.q  = wcclst.at(i).q;
     temp_pt.uq = wcclst.at(i).uq; temp_pt.vq = wcclst.at(i).vq; temp_pt.wq = wcclst.at(i).wq;
     if (wcclst.at(i).q > 8000) {
       temp_unstitch.push_back(temp_pt);
@@ -122,9 +122,8 @@ void StitchTool::load_wc_cluster(WCClst wcclst){
       temp_p.uq = wcclst_test.at(p).uq; temp_p.vq = wcclst_test.at(p).vq; temp_p.wq = wcclst_test.at(p).wq;
       WC_Chunk.push_back(temp_p);
     }
-    
-  }
 
+  }
 
   stitch_pts = temp_unstitch;
 }

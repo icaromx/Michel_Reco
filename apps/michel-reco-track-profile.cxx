@@ -101,13 +101,15 @@ int main(int argc, char **argv){
   std::string rootfile;
 
   while(std::getline(filelist, rootfile)){ //<1> Looping over events
+    std::cout << rootfile << '\n';
     EventHandler event; event.load_event(rootfile); //Loads Even
     std::vector<int> clusters = event.wc_clusters(); //Get cluster list
     WCClst all_clsts = event.Get_All_Tracks();
 
     Int_t run_num, ev_num;
     run_num = event.rn(); ev_num = event.ev();
-
+    std::cout << Form("Run: %d & Event: %d",run_num,ev_num) << '\n';
+    continue;
     WCClstManager clsts; clsts.load_tracks(all_clsts, clusters);
     WCClstBundle EventClsts = clsts.Get_Clusters(); //Clusters Separated
 
@@ -115,7 +117,7 @@ int main(int argc, char **argv){
       StitchTool stitched_clst;
       stitched_clst.load_wc_cluster(cl);
       WCClstPoint clst_points, unclst, temp_unclst, low_q1_unclst;
-      
+
     } //<2> WC clusters loops
     cout << Form("Done with event %d", event.ev()) << endl;
   }//<1> Event Loops

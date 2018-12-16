@@ -25,7 +25,7 @@
 
 #include "mymaths.h"
 #include "pca.h"
-
+/*
 #ifdef __APPLE__
     #if TARGET_OS_MAC
         #include "/usr/local/Cellar/eigen/3.3.4/include/eigen3/Eigen/Dense" //Needed on MACOS
@@ -35,7 +35,8 @@
 #else
 #   error "Unknown compiler"
 #endif
-
+*/
+#include <Dense>
 using namespace std;
 
 namespace PCA{
