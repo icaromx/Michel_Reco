@@ -4,8 +4,8 @@ if [[ "$HOSTNAME" == *"uboonegpvm"* ]]; then
 	setup root v6_12_06a -q e15:prof
 fi
 
-mkdir -p ../test_build_Michel_Reco/
-cd ../test_build_Michel_Reco/
+mkdir -p ../build_Michel_Reco/
+cd ../build_Michel_Reco/
 cmake ../Michel_Reco/
 make
 
